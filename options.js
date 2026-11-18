@@ -3,7 +3,7 @@
 const $ = (id) => document.getElementById(id);
 
 const SWITCHES = ["summaryEnabled", "autoRun", "fwEnabled", "fwButton", "fwEscExits", "fwAuto", "fwScroll",
-  "fwHideScrollbar", "fwMini", "fwTopBar", "fwShowTitle", "fwPipKey", "fwHidePromo", "fwHideMiniBtn"];
+  "fwHideScrollbar", "fwMini", "fwTopBar", "fwShowTitle"];
 const TEXTS = ["apiKey", "model", "prompt"];
 
 let toastTimer;

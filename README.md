@@ -3,14 +3,13 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/fang89/Chrome-extension-youtubesummary/archive/refs/heads/main.zip"><img src="docs/download.svg" alt="⬇ Download the extension" width="420"></a>
+  <a href="https://github.com/fang89/Chrome-extension-youtubeimprovement/archive/refs/heads/main.zip"><img src="docs/download.svg" alt="⬇ Download the extension" width="420"></a>
 </p>
 
 <p align="center">
   <a href="#install">Install</a>
   &nbsp;·&nbsp; <a href="#-the-summary-card">Summary card</a>
   &nbsp;·&nbsp; <a href="#-the-full-window-player">Full-window player</a>
-  &nbsp;·&nbsp; <a href="#-extras">Extras</a>
   &nbsp;·&nbsp; <a href="#every-switch">Every switch</a>
   &nbsp;·&nbsp; <a href="#how-its-built">How it's built</a>
 </p>
@@ -118,23 +117,12 @@ itself. Leaving full window removes those rules.
 
 ---
 
-## 🧹 Extras
-
-Small things that work on every video, whether full window is on or not:
-
-- **<kbd>Alt</kbd> + <kbd>P</kbd> picture-in-picture.** Pops the video into a floating window that
-  stays on top of every app, for when you're working in something else.
-- **Hide "Includes paid promotion".** Removes that overlay from the start of sponsored videos.
-- **Hide YouTube's own miniplayer button**, if you keep clicking it by accident.
-
----
-
 ## Every switch
 
 Click the extension's toolbar icon. Each switch **saves as soon as you flip it** and applies to
 the YouTube tabs you already have open; there's no Save button and no reload.
 
-<p align="center"><img src="docs/settings.png" alt="The settings page: a card of switches for the summary, the full-window player and extras" width="560"></p>
+<p align="center"><img src="docs/settings.png" alt="The settings page: a card of switches for the summary and one for the full-window player" width="560"></p>
 
 | Switch | Default | What it does |
 |---|:-:|---|
@@ -154,9 +142,6 @@ the YouTube tabs you already have open; there's no Save button and no reload.
 | ↳ Floating mini player | Off | Video keeps playing in the corner once you scroll past it. |
 | Keep YouTube's top bar visible | Off | Off: the bar fades out and returns when you hover the top edge. |
 | Keep the video title over the player | Off | |
-| **🧹** <kbd>Alt</kbd>+<kbd>P</kbd> picture-in-picture | On | |
-| **🧹** Hide "Includes paid promotion" | Off | |
-| **🧹** Hide YouTube's miniplayer button | Off | |
 
 **Clear cached summaries** forgets every saved summary.
 
@@ -170,7 +155,7 @@ the YouTube tabs you already have open; there's no Save button and no reload.
 | **YouTube Ask driver**: clicks Ask → Summarize, waits for the answer, copies it safely | `youchat.js` | ~100 lines |
 | **Transcript reader**: opens *Show transcript*, reads the lines, closes it (API mode) | `transcript.js` | ~80 lines |
 | **Gemini API call**: runs in the extension's background worker (API mode) | `background.js` | ~55 lines |
-| **Full-window player**: player-bar button, shortcuts, theater → full-tab stretch, mini player, extras | `fullwindow.js` · `fullwindow.css` | ~185 + ~85 lines |
+| **Full-window player**: player-bar button, shortcuts, theater → full-tab stretch, mini player | `fullwindow.js` · `fullwindow.css` | ~175 + ~80 lines |
 | **Settings page**: switches that save instantly | `options.html` · `options.js` · `defaults.js` | ~280 lines |
 | **Card styles**: follow YouTube's light/dark theme colours | `panel.css` | ~35 lines |
 

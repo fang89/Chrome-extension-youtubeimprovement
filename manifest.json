@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Gemini Summary",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Shows a Gemini summary of every YouTube video in the right-hand column, plus a full-window player mode.",
   "permissions": ["storage"],
   "host_permissions": ["https://generativelanguage.googleapis.com/*"],

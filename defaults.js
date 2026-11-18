@@ -23,7 +23,4 @@ var YTGS_DEFAULTS = {
   fwShowTitle: false,     // keep the video title over the player
   fwMini: false,          // floating mini player once you scroll past the video
   fwEscExits: true,       // Esc leaves full-window
-  fwPipKey: true,         // Alt+P = picture-in-picture
-  fwHidePromo: false,     // hide "Includes paid promotion" overlay
-  fwHideMiniBtn: false,   // hide YouTube's own miniplayer button
 };

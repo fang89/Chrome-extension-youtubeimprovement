@@ -76,8 +76,3 @@ body.ytgs-mini-on ytd-watch #player { position: relative; z-index: 2299 !importa
   display: flex; inset: 0; width: 100%; height: 35px; top: 0; border: 0; border-radius: 0; align-items: center;
 }
 #movie_player.ytgs-mini.ytgs-mini-tucked:hover .ytgs-mini-top { display: none; }
-
-/* ---- Small clean-ups --------------------------------------------------------------- */
-body.ytgs-hide-promo .ytp-paid-content-overlay,
-body.ytgs-hide-promo ytm-paid-content-overlay-renderer { display: none !important; }
-body.ytgs-hide-minibtn .ytp-miniplayer-button { display: none !important; }

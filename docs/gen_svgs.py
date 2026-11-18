@@ -25,7 +25,7 @@ def hero():
          t(60, 118, "YouTube Gemini Summary", 50, weight=800),
          t(62, 160, "a summary of every video, and a player that fills the tab", 22, "#fecaca")]
     x = 62
-    for label, w in [("✨ Summary card", 170), ("⤢ Full-window player", 210), ("🧹 Extras", 120)]:
+    for label, w in [("✨ Summary card", 170), ("⤢ Full-window player", 210)]:
         p.append(pill(x, 200, label, w)); x += w + 14
     p.append(t(62, 290, "Chrome extension · uses YouTube's own Gemini · no API key", 15, "#fca5a5"))
     p.append(t(62, 314, "Every feature has its own on/off switch · Chrome, Edge and Brave", 15, "#fca5a5"))
