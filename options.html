@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>YouTube Gemini Summary – Settings</title>
+  <style>
+    body { font: 14px/1.5 system-ui, sans-serif; max-width: 640px; margin: 32px auto; padding: 0 16px; }
+    label { display: block; font-weight: 600; margin: 18px 0 6px; }
+    input[type=text], input[type=password], select, textarea { width: 100%; box-sizing: border-box; padding: 8px; font: inherit; }
+    textarea { height: 170px; }
+    .hint { color: #666; font-size: 12px; margin-top: 4px; }
+    .row { display: flex; gap: 8px; }
+    button { padding: 8px 14px; font: inherit; cursor: pointer; }
+    #status { margin-left: 10px; color: green; }
+  </style>
+</head>
+<body>
+  <h1>YouTube Gemini Summary</h1>
+
+  <label for="mode">Summary from</label>
+  <select id="mode">
+    <option value="youtube">YouTube's own Gemini (Ask → Summarize the video) — no key needed</option>
+    <option value="api">Gemini API with my prompt below — needs a key</option>
+  </select>
+  <div class="hint">With YouTube's Ask, a key is only used as a fallback on videos where Ask isn't offered.</div>
+
+  <label for="apiKey">Gemini API key (optional)</label>
+  <input id="apiKey" type="password" placeholder="AIza…">
+  <div class="hint">Free from <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>. Stored only in your Chrome profile.</div>
+
+  <label for="model">Model</label>
+  <div class="row"><input id="model" type="text" list="models"><button id="listModels">List models</button></div>
+  <datalist id="models"></datalist>
+  <div class="hint"><code>gemini-flash-latest</code> always points to Google's current Flash model (fast, generous free tier).</div>
+
+  <label><input id="autoRun" type="checkbox"> Summarise automatically when a video opens</label>
+
+  <label for="prompt">API prompt <span class="hint">({title} is replaced with the video title)</span></label>
+  <textarea id="prompt"></textarea>
+
+  <p><button id="save">Save</button> <button id="reset">Reset prompt</button> <button id="clear">Clear cached summaries</button><span id="status"></span></p>
+
+  <script src="defaults.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

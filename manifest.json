@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Gemini Summary",
+  "version": "1.0.0",
+  "description": "Shows a Gemini summary of every YouTube video in the right-hand column.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://generativelanguage.googleapis.com/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["transcript.js", "youchat.js", "content.js"],
+      "css": ["panel.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html",
+  "action": { "default_title": "YouTube Gemini Summary settings" }
+}
