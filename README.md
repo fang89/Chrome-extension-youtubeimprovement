@@ -16,18 +16,14 @@
 
 ---
 
-Two things about watching YouTube on a computer are annoying. A 40-minute video might hold three
-minutes you actually need. And the player is either a small box surrounded by clutter, or true
-fullscreen that takes over your whole monitor.
+**Watch bigger. Decide faster.** Two upgrades for YouTube on a computer:
 
-**YouTube Gemini Summary** is a small Chrome extension that fixes both:
+| | |
+|:-:|---|
+| **⤢ Full screen, inside the tab** | Press <kbd>`</kbd> and the video fills the whole browser tab, edge to edge. Your other windows stay put, and you can still scroll down to the comments. |
+| **✨ A summary before you press play** | A Gemini summary of every video appears beside it, so you know in seconds whether it's worth 40 minutes. It uses YouTube's own Gemini, so no API key is needed. |
 
-- **✨ A summary of every video**, at the top of the right-hand column, before you press play.
-  It comes from **YouTube's own Gemini**, so you don't need an API key or another account.
-- **⤢ A full-window player.** The video fills the **browser tab**, not the monitor. Your other
-  windows stay where they are, and you can still scroll down to the summary and comments.
-
-Every feature has its own **on/off switch**, so you can keep only the parts you like.
+Both can be switched on or off, along with every option inside them.
 
 ## Install
 
