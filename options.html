@@ -2,44 +2,189 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>YouTube Gemini Summary – Settings</title>
   <style>
-    body { font: 14px/1.5 system-ui, sans-serif; max-width: 640px; margin: 32px auto; padding: 0 16px; }
-    label { display: block; font-weight: 600; margin: 18px 0 6px; }
-    input[type=text], input[type=password], select, textarea { width: 100%; box-sizing: border-box; padding: 8px; font: inherit; }
-    textarea { height: 170px; }
-    .hint { color: #666; font-size: 12px; margin-top: 4px; }
-    .row { display: flex; gap: 8px; }
-    button { padding: 8px 14px; font: inherit; cursor: pointer; }
-    #status { margin-left: 10px; color: green; }
+    :root {
+      --bg: #f8fafc; --card: #fff; --line: #e2e8f0; --text: #0f172a; --muted: #64748b;
+      --accent: #dc2626; --accent2: #7c3aed; --off: #cbd5e1;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #0f0f0f; --card: #1c1c1c; --line: #2e2e2e; --text: #f1f1f1; --muted: #9a9a9a; --off: #444; }
+    }
+    * { box-sizing: border-box; }
+    body { font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text);
+           max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { font-size: 24px; margin: 0 0 4px; }
+    .lead { color: var(--muted); margin: 0 0 24px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+    .card > header { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .card > header .icon { font-size: 22px; }
+    .card > header h2 { font-size: 17px; margin: 0; }
+    .card > header p { margin: 0; color: var(--muted); font-size: 13px; }
+    .card > header .grow { flex: 1; }
+    .card.disabled .rows { opacity: .4; pointer-events: none; }
+    .row { display: flex; align-items: center; gap: 14px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+    .row:last-child { border-bottom: 0; }
+    .row .txt { flex: 1; }
+    .row .name { font-weight: 600; }
+    .row .desc { color: var(--muted); font-size: 12.5px; }
+    .row.sub { padding-left: 42px; }
+    .row.stack { display: block; }
+    .row.stack .name { margin-bottom: 6px; }
+
+    /* toggle switch */
+    .sw { position: relative; width: 42px; height: 24px; flex: none; }
+    .sw input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .sw span { position: absolute; inset: 0; border-radius: 12px; background: var(--off); cursor: pointer; transition: background .15s; }
+    .sw span::after { content: ""; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%;
+                      background: #fff; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+    .sw input:checked + span { background: var(--accent); }
+    .sw input:checked + span::after { transform: translateX(18px); }
+    .sw input:focus-visible + span { outline: 2px solid var(--accent2); outline-offset: 2px; }
+    header .sw { transform: scale(1.15); }
+
+    input[type=text], input[type=password], select, textarea {
+      width: 100%; padding: 8px 10px; font: inherit; color: var(--text); background: var(--bg);
+      border: 1px solid var(--line); border-radius: 8px; }
+    textarea { height: 150px; resize: vertical; }
+    #fwKey { width: 110px; text-align: center; font-weight: 700; font-size: 18px; cursor: pointer; }
+    #listModels { white-space: nowrap; }
+    .inline { display: flex; gap: 8px; }
+    button { padding: 7px 14px; font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--line);
+             background: var(--bg); color: var(--text); }
+    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    kbd { border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 12px; }
+    a { color: var(--accent2); }
+    #status { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: #16a34a; color: #fff;
+              padding: 8px 16px; border-radius: 20px; font-weight: 600; opacity: 0; transition: opacity .2s; pointer-events: none; }
+    #status.show { opacity: 1; }
   </style>
 </head>
 <body>
   <h1>YouTube Gemini Summary</h1>
+  <p class="lead">Every switch saves the moment you flip it and takes effect in your open YouTube tabs.</p>
 
-  <label for="mode">Summary from</label>
-  <select id="mode">
-    <option value="youtube">YouTube's own Gemini (Ask → Summarize the video) — no key needed</option>
-    <option value="api">Gemini API with my prompt below — needs a key</option>
-  </select>
-  <div class="hint">With YouTube's Ask, a key is only used as a fallback on videos where Ask isn't offered.</div>
+  <!-- ============ SUMMARY ============ -->
+  <section class="card" id="summaryCard">
+    <header>
+      <span class="icon">✨</span>
+      <div class="grow"><h2>Gemini summary</h2><p>A summary card at the top of the right-hand column.</p></div>
+      <label class="sw"><input type="checkbox" id="summaryEnabled" data-card="summaryCard"><span></span></label>
+    </header>
+    <div class="rows">
+      <div class="row">
+        <div class="txt"><div class="name">Summarise automatically</div>
+          <div class="desc">Off: the card shows a “Summarise this video” button instead.</div></div>
+        <label class="sw"><input type="checkbox" id="autoRun"><span></span></label>
+      </div>
+      <div class="row stack">
+        <div class="name">Summary from</div>
+        <select id="mode">
+          <option value="youtube">YouTube's own Gemini (Ask → Summarize the video), no key needed</option>
+          <option value="api">Gemini API with my own prompt (needs a key)</option>
+        </select>
+        <div class="desc">With YouTube's Ask, a key is only used as a fallback on videos where Ask isn't offered.</div>
+      </div>
+      <div class="row stack">
+        <div class="name">Gemini API key <span class="desc">(optional)</span></div>
+        <input id="apiKey" type="password" placeholder="AIza…" data-text>
+        <div class="desc">Free from <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>. Stored only in your Chrome profile.</div>
+      </div>
+      <div class="row stack">
+        <div class="name">Model</div>
+        <div class="inline"><input id="model" type="text" list="models" data-text><button id="listModels">List models</button></div>
+        <datalist id="models"></datalist>
+        <div class="desc"><code>gemini-flash-latest</code> always points to Google's current Flash model.</div>
+      </div>
+      <div class="row stack">
+        <div class="name">API prompt <span class="desc">({title} becomes the video title)</span></div>
+        <textarea id="prompt" data-text></textarea>
+        <div class="inline" style="margin-top:8px">
+          <button id="reset">Reset prompt</button>
+          <button id="clear">Clear cached summaries</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <label for="apiKey">Gemini API key (optional)</label>
-  <input id="apiKey" type="password" placeholder="AIza…">
-  <div class="hint">Free from <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>. Stored only in your Chrome profile.</div>
+  <!-- ============ FULL WINDOW ============ -->
+  <section class="card" id="fwCard">
+    <header>
+      <span class="icon">⤢</span>
+      <div class="grow"><h2>Full-window player</h2><p>The video fills the browser tab, not your whole screen.</p></div>
+      <label class="sw"><input type="checkbox" id="fwEnabled" data-card="fwCard"><span></span></label>
+    </header>
+    <div class="rows">
+      <div class="row">
+        <div class="txt"><div class="name">Button in the player bar</div>
+          <div class="desc">A ⤢ button next to YouTube's theater button.</div></div>
+        <label class="sw"><input type="checkbox" id="fwButton"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Shortcut key</div>
+          <div class="desc">Click the box and press a key. Avoid keys YouTube uses (f, t, i, k, j, l, m, c, numbers).</div></div>
+        <input id="fwKey" type="text" readonly>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name"><kbd>Esc</kbd> leaves full-window</div></div>
+        <label class="sw"><input type="checkbox" id="fwEscExits"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Turn on for every video</div>
+          <div class="desc">Every video opens full-window, including the next one you click.</div></div>
+        <label class="sw"><input type="checkbox" id="fwAuto"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Scroll down to the summary and comments</div>
+          <div class="desc">Off: the page is locked to the video.</div></div>
+        <label class="sw"><input type="checkbox" id="fwScroll"><span></span></label>
+      </div>
+      <div class="row sub">
+        <div class="txt"><div class="name">Hide the scrollbar</div></div>
+        <label class="sw"><input type="checkbox" id="fwHideScrollbar"><span></span></label>
+      </div>
+      <div class="row sub">
+        <div class="txt"><div class="name">Floating mini player</div>
+          <div class="desc">Once you scroll past the video, it keeps playing in the bottom-right corner.</div></div>
+        <label class="sw"><input type="checkbox" id="fwMini"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Keep YouTube's top bar visible</div>
+          <div class="desc">Off: the bar fades out and comes back when you hover the top edge.</div></div>
+        <label class="sw"><input type="checkbox" id="fwTopBar"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Keep the video title over the player</div></div>
+        <label class="sw"><input type="checkbox" id="fwShowTitle"><span></span></label>
+      </div>
+    </div>
+  </section>
 
-  <label for="model">Model</label>
-  <div class="row"><input id="model" type="text" list="models"><button id="listModels">List models</button></div>
-  <datalist id="models"></datalist>
-  <div class="hint"><code>gemini-flash-latest</code> always points to Google's current Flash model (fast, generous free tier).</div>
+  <!-- ============ EXTRAS ============ -->
+  <section class="card">
+    <header>
+      <span class="icon">🧹</span>
+      <div class="grow"><h2>Extras</h2><p>Small things that work on every video.</p></div>
+    </header>
+    <div class="rows">
+      <div class="row">
+        <div class="txt"><div class="name"><kbd>Alt</kbd> + <kbd>P</kbd> picture-in-picture</div>
+          <div class="desc">Pops the video into a floating window that stays on top of other apps.</div></div>
+        <label class="sw"><input type="checkbox" id="fwPipKey"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Hide “Includes paid promotion”</div></div>
+        <label class="sw"><input type="checkbox" id="fwHidePromo"><span></span></label>
+      </div>
+      <div class="row">
+        <div class="txt"><div class="name">Hide YouTube's own miniplayer button</div></div>
+        <label class="sw"><input type="checkbox" id="fwHideMiniBtn"><span></span></label>
+      </div>
+    </div>
+  </section>
 
-  <label><input id="autoRun" type="checkbox"> Summarise automatically when a video opens</label>
-
-  <label for="prompt">API prompt <span class="hint">({title} is replaced with the video title)</span></label>
-  <textarea id="prompt"></textarea>
-
-  <p><button id="save">Save</button> <button id="reset">Reset prompt</button> <button id="clear">Clear cached summaries</button><span id="status"></span></p>
-
+  <div id="status"></div>
   <script src="defaults.js"></script>
   <script src="options.js"></script>
 </body>

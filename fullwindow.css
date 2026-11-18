@@ -1,0 +1,83 @@
+/* ---- Full-window mode (fullwindow.js toggles these body classes) ---------------------- */
+
+/* Not scrollable: the player is the whole page. */
+body.ytgs-fw:not(.ytgs-fw-scroll) { overflow-y: hidden !important; }
+
+/* Scrollable but no visible scrollbar. */
+html:has(body.ytgs-fw-noscrollbar),
+body.ytgs-fw-noscrollbar,
+body.ytgs-fw-noscrollbar ytd-app,
+body.ytgs-fw-noscrollbar ytd-watch-flexy,
+body.ytgs-fw-noscrollbar ytd-watch-grid,
+body.ytgs-fw-noscrollbar ytd-watch { scrollbar-width: none !important; }
+body.ytgs-fw-noscrollbar::-webkit-scrollbar { display: none !important; width: 0 !important; }
+
+/* Top bar: invisible over the video, shows on hover / focus / after scrolling down. */
+body.ytgs-fw #masthead-container { opacity: 0 !important; transition: opacity 0.15s; }
+body.ytgs-fw #masthead-container:hover,
+body.ytgs-fw #masthead-container:focus-within,
+body.ytgs-fw #masthead-container.ytgs-show { opacity: 1 !important; }
+body.ytgs-fw ytd-page-manager,
+body.ytgs-fw ytd-watch-flexy { margin-top: 0 !important; }
+
+/* Stretch the theater-mode player to the full viewport height. */
+body.ytgs-fw #full-bleed-container,
+body.ytgs-fw ytd-watch #player.ytd-watch,
+body.ytgs-fw ytd-watch-grid #player-full-bleed-container {
+  height: 100vh !important; max-height: 100vh !important; min-height: 0 !important;
+}
+body.ytgs-fw #movie_player:not(.ytgs-mini) { height: 100vh !important; width: 100% !important; }
+body.ytgs-fw .html5-video-container { background: #000; }
+body.ytgs-fw .ytp-chrome-top-buttons { display: none !important; }
+
+/* "Keep YouTube's top bar visible": bar stays in the page, player takes the rest. */
+body.ytgs-fw-topbar #masthead-container { opacity: 1 !important; position: relative !important; }
+body.ytgs-fw-topbar #full-bleed-container { height: calc(100vh - 56px) !important; max-height: calc(100vh - 56px) !important; }
+body.ytgs-fw-topbar #movie_player:not(.ytgs-mini) { height: calc(100vh - 56px) !important; }
+
+/* Our player-bar button. */
+#ytgs-fw-btn { width: 42px !important; padding: 0 !important; display: inline-block !important; }
+
+/* ---- Floating mini player (after you scroll past the video) ------------------------- */
+#movie_player.ytgs-mini {
+  position: fixed !important; right: 10px; bottom: 10px; z-index: 2299;
+  width: 480px !important; height: 270px !important;
+  background: rgba(0, 0, 0, 0.5); transition: bottom 0.2s ease-in-out;
+}
+#movie_player.ytgs-mini.ytgs-mini-tucked { bottom: -235px; }
+/* The player's z-index alone isn't enough on 2026 YouTube: the related-video column still
+   paints over it. Lifting the player's own container above the page fixes that. */
+body.ytgs-mini-on #full-bleed-container,
+body.ytgs-mini-on #player-full-bleed-container,
+body.ytgs-mini-on ytd-watch #player { position: relative; z-index: 2299 !important; }
+#movie_player.ytgs-mini video {
+  width: 480px !important; height: 270px !important; max-width: 480px !important; max-height: 270px !important;
+  left: 0 !important; top: 0 !important; object-fit: contain;
+}
+#movie_player.ytgs-mini .ytp-chrome-bottom { width: 456px !important; max-width: 456px !important; max-height: 36px !important; }
+#movie_player.ytgs-mini .ytp-caption-segment { font-size: 12px !important; }
+#movie_player.ytgs-mini .ytp-size-button,
+#movie_player.ytgs-mini .ytp-miniplayer-button { display: none !important; }
+
+#movie_player .ytgs-mini-top,
+#movie_player .ytgs-mini-hide {
+  position: absolute; top: 5px; z-index: 9999; display: none; width: 100px; padding: 4px 0;
+  justify-content: center; cursor: pointer; border-radius: 6px; font: 500 12px Roboto, Arial, sans-serif;
+  background: rgba(0, 0, 0, 0.5); color: rgba(255, 255, 255, 0.75); border: 1px solid rgba(255, 255, 255, 0.2);
+}
+#movie_player .ytgs-mini-top { right: 5px; }
+#movie_player .ytgs-mini-hide { left: 5px; }
+#movie_player.ytgs-mini:hover .ytgs-mini-top,
+#movie_player.ytgs-mini:hover .ytgs-mini-hide { display: flex; }
+#movie_player .ytgs-mini-top:hover,
+#movie_player .ytgs-mini-hide:hover { background: rgba(0, 0, 0, 0.85); color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+/* Tucked away: the whole visible strip becomes the "Show" button. */
+#movie_player.ytgs-mini.ytgs-mini-tucked .ytgs-mini-hide {
+  display: flex; inset: 0; width: 100%; height: 35px; top: 0; border: 0; border-radius: 0; align-items: center;
+}
+#movie_player.ytgs-mini.ytgs-mini-tucked:hover .ytgs-mini-top { display: none; }
+
+/* ---- Small clean-ups --------------------------------------------------------------- */
+body.ytgs-hide-promo .ytp-paid-content-overlay,
+body.ytgs-hide-promo ytm-paid-content-overlay-renderer { display: none !important; }
+body.ytgs-hide-minibtn .ytp-miniplayer-button { display: none !important; }

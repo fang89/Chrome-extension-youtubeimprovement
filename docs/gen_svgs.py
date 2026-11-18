@@ -23,12 +23,12 @@ def hero():
          '<stop offset="1" stop-color="#b91c1c"/></linearGradient></defs>',
          '<rect width="1200" height="400" rx="16" fill="url(#g)"/>',
          t(60, 118, "YouTube Gemini Summary", 50, weight=800),
-         t(62, 160, "a summary of every video, right beside it", 22, "#fecaca")]
+         t(62, 160, "a summary of every video, and a player that fills the tab", 22, "#fecaca")]
     x = 62
-    for label, w in [("1. Open a video", 160), ("2. Wait ~7 s", 130), ("3. Read the summary", 196)]:
+    for label, w in [("✨ Summary card", 170), ("⤢ Full-window player", 210), ("🧹 Extras", 120)]:
         p.append(pill(x, 200, label, w)); x += w + 14
     p.append(t(62, 290, "Chrome extension · uses YouTube's own Gemini · no API key", 15, "#fca5a5"))
-    p.append(t(62, 314, "Free · open source · works on Chrome, Edge and Brave", 15, "#fca5a5"))
+    p.append(t(62, 314, "Every feature has its own on/off switch · Chrome, Edge and Brave", 15, "#fca5a5"))
 
     # mini watch page
     X, Y = 720, 40
@@ -106,6 +106,74 @@ def flow():
     return "".join(p)
 
 
-for name, fn in [("hero", hero), ("download", download), ("flow", flow)]:
+def fullwindow():
+    """Three mini browser windows: normal page, full-window, and the floating mini player."""
+    W, H = 1200, 360
+    p = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img">',
+         f'<rect width="{W}" height="{H}" rx="16" fill="#0f0f0f"/>']
+    bw, bh, y0 = 352, 236, 40
+
+    def browser(x, title, sub):
+        p.append(f'<rect x="{x}" y="{y0}" width="{bw}" height="{bh}" rx="10" fill="#1c1c1c" stroke="#3a3a3a"/>')
+        p.append(f'<rect x="{x}" y="{y0}" width="{bw}" height="22" rx="10" fill="#2a2a2a"/>'
+                 f'<rect x="{x}" y="{y0+12}" width="{bw}" height="10" fill="#2a2a2a"/>')
+        for i, c in enumerate(["#ff5f57", "#febc2e", "#28c840"]):
+            p.append(f'<circle cx="{x+14+i*14}" cy="{y0+11}" r="4.5" fill="{c}"/>')
+        p.append(t(x + bw / 2, y0 + bh + 34, title, 19, weight=700, anchor="middle"))
+        p.append(t(x + bw / 2, y0 + bh + 58, sub, 14, "#aaa", anchor="middle"))
+
+    def video(x, y, w, h, big=True):
+        p.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#000"/>')
+        p.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="url(#vg)" opacity=".9"/>')
+        cx, cy, r = x + w / 2, y + h / 2, (18 if big else 9)
+        p.append(f'<path d="M{cx-r*.6} {cy-r} L{cx+r} {cy} L{cx-r*.6} {cy+r} Z" fill="#fff" fill-opacity=".85"/>')
+        p.append(f'<rect x="{x+8}" y="{y+h-10}" width="{w-16}" height="3" rx="1.5" fill="#555"/>'
+                 f'<rect x="{x+8}" y="{y+h-10}" width="{(w-16)*.35}" height="3" rx="1.5" fill="#f00"/>')
+
+    p.append('<defs><linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/>'
+             '<stop offset="1" stop-color="#dc2626"/></linearGradient></defs>')
+    # 1. normal
+    x = 28
+    browser(x, "Normal YouTube", "video in a box, top bar, sidebar")
+    p.append(f'<rect x="{x}" y="{y0+22}" width="{bw}" height="18" fill="#272727"/>'
+             f'<rect x="{x+120}" y="{y0+27}" width="110" height="8" rx="4" fill="#444"/>')
+    video(x + 10, y0 + 48, 214, 120)
+    p.append(f'<rect x="{x+234}" y="{y0+48}" width="108" height="56" rx="6" fill="#272727" stroke="#a78bfa"/>'
+             + t(x + 288, y0 + 64, "✨ summary", 10, anchor="middle"))
+    for i in range(4):
+        p.append(f'<rect x="{x+234}" y="{y0+112+i*28}" width="40" height="22" rx="3" fill="#272727"/>'
+                 f'<rect x="{x+280}" y="{y0+116+i*28}" width="58" height="6" rx="3" fill="#3f3f3f"/>')
+    for i in range(3):
+        p.append(f'<rect x="{x+10}" y="{y0+180+i*14}" width="{190-i*40}" height="7" rx="3.5" fill="#3f3f3f"/>')
+    # arrow
+    def arrow(ax, label):
+        p.append(f'<path d="M{ax} {y0+bh/2} H{ax+28} M{ax+20} {y0+bh/2-8} L{ax+30} {y0+bh/2} L{ax+20} {y0+bh/2+8}" '
+                 'stroke="#aaa" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+        p.append(t(ax + 15, y0 + bh / 2 - 16, label, 13, "#fff", 700, "middle"))
+    arrow(x + bw + 9, "` key")
+    # 2. full window
+    x = 28 + bw + 52
+    browser(x, "Full window", "fills the tab · top bar shows on hover")
+    video(x + 1, y0 + 22, bw - 2, bh - 23)
+    p.append(f'<rect x="{x+1}" y="{y0+22}" width="{bw-2}" height="18" fill="#272727" fill-opacity=".35" stroke="#fff" stroke-opacity=".3" stroke-dasharray="4 3"/>')
+    p.append(t(x + bw / 2, y0 + 35, "hover here for YouTube's top bar", 10, "#ddd", anchor="middle"))
+    arrow(x + bw + 9, "scroll")
+    # 3. mini
+    x = 28 + 2 * (bw + 52)
+    browser(x, "Floating mini player", "keeps playing while you read")
+    p.append(f'<rect x="{x+10}" y="{y0+32}" width="214" height="56" rx="6" fill="#272727" stroke="#a78bfa"/>'
+             + t(x + 20, y0 + 50, "✨ Gemini summary", 11, weight=700))
+    for i in range(3):
+        p.append(f'<rect x="{x+20}" y="{y0+60+i*9}" width="{180-i*30}" height="5" rx="2.5" fill="#aaa"/>')
+    for i in range(4):
+        p.append(f'<circle cx="{x+22}" cy="{y0+108+i*30}" r="8" fill="#3f3f3f"/>'
+                 f'<rect x="{x+36}" y="{y0+104+i*30}" width="{200-i*25}" height="7" rx="3.5" fill="#3f3f3f"/>')
+    video(x + bw - 150, y0 + bh - 92, 140, 80, big=False)
+    p.append(f'<rect x="{x+bw-150}" y="{y0+bh-92}" width="140" height="80" fill="none" stroke="#fff" stroke-width="1.5"/>')
+    p.append("</svg>")
+    return "".join(p)
+
+
+for name, fn in [("hero", hero), ("download", download), ("flow", flow), ("fullwindow", fullwindow)]:
     (OUT / f"{name}.svg").write_text(fn())
     print("wrote", name)

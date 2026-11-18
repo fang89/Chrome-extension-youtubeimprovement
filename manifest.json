@@ -1,16 +1,16 @@
 {
   "manifest_version": 3,
   "name": "YouTube Gemini Summary",
-  "version": "1.0.0",
-  "description": "Shows a Gemini summary of every YouTube video in the right-hand column.",
+  "version": "1.1.0",
+  "description": "Shows a Gemini summary of every YouTube video in the right-hand column, plus a full-window player mode.",
   "permissions": ["storage"],
   "host_permissions": ["https://generativelanguage.googleapis.com/*"],
   "background": { "service_worker": "background.js" },
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["transcript.js", "youchat.js", "content.js"],
-      "css": ["panel.css"],
+      "js": ["defaults.js", "transcript.js", "youchat.js", "content.js", "fullwindow.js"],
+      "css": ["panel.css", "fullwindow.css"],
       "run_at": "document_idle"
     }
   ],

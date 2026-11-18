@@ -27,11 +27,13 @@
 
   // ---- panel -------------------------------------------------------------
   async function ensurePanel() {
-    let panel = document.getElementById(PANEL_ID);
     const host = await waitFor("ytd-watch-flexy #secondary-inner, ytd-watch-flexy #secondary");
     if (!host) return null;
+    // Read the panel only AFTER the wait: two runs can overlap on page load, and reading it
+    // before the await let both of them build a card (two #ytgs-panel elements).
+    let panel = document.getElementById(PANEL_ID);
     if (panel && panel.parentElement === host && host.firstElementChild === panel) return panel;
-    panel?.remove();
+    removePanels();
     panel = el("div", { id: PANEL_ID },
       el("div", { class: "ytgs-head" },
         el("span", { class: "ytgs-title" }, "✨ Gemini summary"),
@@ -48,6 +50,8 @@
     host.prepend(panel);
     return panel;
   }
+
+  const removePanels = () => document.querySelectorAll(`#${PANEL_ID}`).forEach((p) => p.remove());
 
   function setBody(panel, node, src = "") {
     const body = panel.querySelector(".ytgs-body");
@@ -108,7 +112,10 @@
   async function run(force = false) {
     const videoId = videoIdFromUrl();
     const token = ++runToken;
-    if (!videoId) { document.getElementById(PANEL_ID)?.remove(); return; }
+    if (!videoId) { removePanels(); return; }
+    const { summaryEnabled = true } = await chrome.storage.sync.get("summaryEnabled");
+    if (token !== runToken) return;
+    if (!summaryEnabled) { removePanels(); return; }
     const panel = await ensurePanel();
     if (!panel || token !== runToken) return;
     const current = () => token === runToken && videoIdFromUrl() === videoId;
@@ -120,6 +127,7 @@
     }
 
     const s = await chrome.runtime.sendMessage({ type: "getSettings" });
+    if (!current()) return;
     if (!s.autoRun && !force) {
       setBody(panel, el("button", { class: "ytgs-go", onclick: () => run(true) }, "Summarise this video"));
       return;
@@ -175,5 +183,7 @@
   }
 
   document.addEventListener("yt-navigate-finish", () => run());
+  // Switching the card on/off in settings takes effect without a reload.
+  chrome.storage.onChanged.addListener((c, area) => { if (area === "sync" && "summaryEnabled" in c) run(); });
   run();
 })();
