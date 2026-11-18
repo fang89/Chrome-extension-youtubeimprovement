@@ -174,6 +174,6 @@ def fullwindow():
     return "".join(p)
 
 
-for name, fn in [("hero", hero), ("download", download), ("flow", flow), ("fullwindow", fullwindow)]:
+for name, fn in [("banner", hero), ("download", download), ("flow", flow), ("fullwindow", fullwindow)]:
     (OUT / f"{name}.svg").write_text(fn())
     print("wrote", name)

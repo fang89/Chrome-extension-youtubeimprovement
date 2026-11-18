@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/hero.svg" alt="YouTube Improvement: full screen inside the tab, and a summary of every video" width="100%">
+  <img src="docs/banner.svg" alt="YouTube Improvement: full screen inside the tab, and a summary of every video" width="100%">
 </p>
 
 <p align="center">
