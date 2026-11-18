@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Gemini Summary",
+  "name": "YouTube Improvement",
   "version": "1.2.0",
-  "description": "Shows a Gemini summary of every YouTube video in the right-hand column, plus a full-window player mode.",
+  "description": "Full screen inside the browser tab, plus a Gemini summary of every YouTube video before you press play.",
   "permissions": ["storage"],
   "host_permissions": ["https://generativelanguage.googleapis.com/*"],
   "background": { "service_worker": "background.js" },
@@ -15,5 +15,5 @@
     }
   ],
   "options_page": "options.html",
-  "action": { "default_title": "YouTube Gemini Summary settings" }
+  "action": { "default_title": "YouTube Improvement settings" }
 }

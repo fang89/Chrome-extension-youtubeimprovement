@@ -22,10 +22,10 @@ def hero():
          '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/>'
          '<stop offset="1" stop-color="#b91c1c"/></linearGradient></defs>',
          '<rect width="1200" height="400" rx="16" fill="url(#g)"/>',
-         t(60, 118, "YouTube Gemini Summary", 50, weight=800),
-         t(62, 160, "a summary of every video, and a player that fills the tab", 22, "#fecaca")]
+         t(60, 118, "YouTube Improvement", 50, weight=800),
+         t(62, 160, "full screen inside the tab, and a summary of every video", 22, "#fecaca")]
     x = 62
-    for label, w in [("✨ Summary card", 170), ("⤢ Full-window player", 210)]:
+    for label, w in [("⤢ Full-window player", 210), ("✨ Summary card", 170)]:
         p.append(pill(x, 200, label, w)); x += w + 14
     p.append(t(62, 290, "Chrome extension · uses YouTube's own Gemini · no API key", 15, "#fca5a5"))
     p.append(t(62, 314, "Every feature has its own on/off switch · Chrome, Edge and Brave", 15, "#fca5a5"))
